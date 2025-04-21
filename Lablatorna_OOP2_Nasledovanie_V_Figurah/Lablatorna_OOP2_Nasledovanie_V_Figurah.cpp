@@ -9,7 +9,7 @@
 using namespace std;
 void GlobalInterface();
 
-double P = P;
+double P = 3.141592;
 
 class shape {
 
@@ -343,7 +343,7 @@ public:
 	{
 		if (val >= 0) {
 			this->Square = val;
-			setSideLength(sqrt((0.25*val)/sqrt(3)));
+			setSideLength(sqrt((4*val)/sqrt(3)));
 		}
 		else {
 			cout << "\n\tError! Area must be > 0!";
@@ -426,7 +426,7 @@ public:
 	{
 		if (val >= 0) {
 			this->Square = val;
-			setSideLength((4*val)/(5*sqrt(1+(2/sqrt(5)))));
+			setSideLength(0.7624*sqrt(val));
 		}
 		else {
 			cout << "\n\tError! Area must be > 0!";
@@ -599,7 +599,7 @@ public:
 		ostringstream ss;
 		ss << "\n\tName: " << name;
 		ss << "\n\tArea: " << Square;
-		ss << "\n\tRadius: " << Radius << "\n\tLengthOfCircle: " << PerimetrOfCircle;
+		ss << "\n\tRadius: " << Radius << "\n\tPerimetr: " << PerimetrOfCircle;
 		return ss.str();
 		}
 };
@@ -911,6 +911,7 @@ public:
 			this->PerimetrOfCircle = 0;
 			this->Radius = 0;
 			this->volume = 0;
+			cout << "Bed params!";
 		}
 		// методы вписаного круга........................................................
 	}
@@ -925,7 +926,7 @@ public:
 			Radius = val;
 			this->Square = P * Radius * Radius * 4;
 			this->PerimetrOfCircle = (P * val) * 2;
-			this->volume = (4 / 3) * P * pow(val, 3);
+			this->volume = (4.0 / 3.0) * P * pow(val, 3);
 		}
 		else {
 			cout << "\n\tError! Radius must be > 0!";
@@ -941,7 +942,7 @@ public:
 			cout << "\n\tError! Area must be > 0!";
 		}
 	}
-	void SetPerimetr(double val) {
+	void SetVolume(double val) {
 		if (val >= 0) {
 			SetRadius(cbrt(3*val/(4*P)));
 		}
@@ -951,14 +952,14 @@ public:
 		ostringstream ss;
 		ss << "\n\tName: " << name;
 		ss << "\n\tArea: " << Square;
-		ss << "\n\tRadius: " << Radius << "\n\tLength of circle: " << PerimetrOfCircle;
+		ss << "\n\tRadius: " << Radius;
 		ss << "\n\tVolumeOfSphere: " << volume;
 		return ss.str();
 	}
 
 
-	shape* GetShapeOfSide() {
-		Circle* R = new Circle(SideLength); // 
+	Circle* GetShapeOfSide() {
+		Circle* R = new Circle(Radius); // 
 		return R;
 	}
 };
@@ -977,11 +978,19 @@ int main()
 
 void GlobalInterface()
 {
+cout << "\n\tHello! You are in user interface. Here you can create right shapes and modify them. You have shapes:\n\t";
+
+string ShapeName;
+string Variables[10] = { "Square", "Triangle", "Pentagon", "Hexagon", "Circle", "Tetraeder", "Cube", "Oktaeder", "Dodekaeder" , "Sphere" };
+double LengthVal;
+
+for (int i = 0; i < 10; i++) {
+	cout << "\"" << Variables[i] << "\", ";
+}
+cout << endl << "\tEnter type: \"Shape (value)\"\n\t";
+
 	while (true)
 	{
-		string ShapeName;
-		string Variables[10] = { "Square", "Triangle", "Pentagon", "Hexagon", "Circle", "Tetraeder", "Cube", "Oktaeder", "Dodekaeder" , "Sphere" };
-		double LengthVal;
 		cout << "\n\tEnter shape you want explore and her side length: ";
 		cin >> ShapeName >> LengthVal;
 		int id;
@@ -1039,6 +1048,9 @@ void GlobalInterface()
 			Sphere A(LengthVal);
 			ShapeProcessing(&A, LengthVal);
 		}
+		if (ShapeName == "/Out") {
+			return;
+		}
 
 	}
 
@@ -1053,34 +1065,218 @@ void DeleteFlatSHapeObject(shape* obj) { // Дружественная функ�
 }
 int ShapeProcessing(FlatShape* Shape, double val) {
 	string select;
+	double valToCommand;
+	cout << "\n\tYou created your shape! Now, you can apply a few modification. Your shape: \n\n";
+	cout << Shape->shapeToString();
+
+	cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+	cout << "Enter \"/SetPerimetr (value)\" to set perimetr for your shape\n\t";
+	cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+	cout << "Enter \"/SetRadiusOfDescribedCircle (value)\" to setradius of described circle for your shape\n\t";
+	cout << "Enter \"/SetRadiusOfInscribedCircle (value)\" to setradius of inscribed circle for your shape\n\t";
+	cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+	cout << "Enter \"/End (0)\" to set area for your shape\n\t";
 
 	while (true)
 	{
-		cout << "\n\tYou created your shape! Now, you can apply a few modification.";
-		cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
-		cout << "Enter \"/SetPerimetr (value)\" to set perimetr for your shape\n\t";
-		cout << "Enter \"/SetPerimetr (value)\" to set perimetr for your shape\n\t";
-		cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
-		cout << "Enter \"/SetRadiusOfDescribedCircle (value)\" to setradius of described circle for your shape\n\t";
-		cout << "Enter \"/SetRadiusOfInscribedCircle (value)\" to setradius of inscribed circle for your shape\n\t";
+		cout << "\n\tEnter command: ";
+		cin >> select >> valToCommand;
 		
-	
+		if (select == "/SetPerimetr") {
+			Shape->SetPerimetr(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/Info") {
+			cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+			cout << "Enter \"/SetPerimetr (value)\" to set perimetr for your shape\n\t";
+			cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+			cout << "Enter \"/SetRadiusOfDescribedCircle (value)\" to setradius of described circle for your shape\n\t";
+			cout << "Enter \"/SetRadiusOfInscribedCircle (value)\" to setradius of inscribed circle for your shape\n\t";
+			cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+			cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+			continue;
+		}
+		if (select == "/SetArea") {
+			Shape->SetSquare(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetSideLength") {
+			Shape->setSideLength(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetRadiusOfDescribedCircle") {
+			Shape->SetRadiusOfDescribedCircle(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetRadiusOfInscribedCircle") {
+			Shape->SetRadiusOfInscribedCircle(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/End") {
+			return 0;
+		}
 	}
 
 	return 0;
 }
 int ShapeProcessing(VolumeShape* Shape, double val) {
+	string select;
+	double valToCommand;
+	cout << "\n\tYou created your shape! Now, you can apply a few modification. Your shape: \n\n";
 	cout << Shape->shapeToString();
 
+	cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+	cout << "Enter \"/SetVolume (value)\" to set volume for your shape\n\t";
+	cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+	cout << "Enter \"/GetShapeOfSide (0)\" to setradius of inscribed circle for your shape\n\t";
+	cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+	cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+
+	while (true)
+	{
+		cout << "\n\tEnter command: ";
+		cin >> select >> valToCommand;
+
+		if (select == "/Info") {
+			cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+			cout << "Enter \"/SetVolume (value)\" to set volume for your shape\n\t";
+			cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+			cout << "Enter \"/GetShapeOfSide (0)\" to setradius of inscribed circle for your shape\n\t";
+			cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+			cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+			continue;
+		}
+		if (select == "/SetArea") {
+			Shape->SetSquare(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetSideLength") {
+			Shape->setSideLength(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetVolume") {
+			Shape->SetVolume(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/GetShapeOfSide") {
+			FlatShape* A = Shape->GetShapeOfSide();
+			cout << endl << A->shapeToString() << endl;
+			DeleteFlatSHapeObject(A);
+			continue;
+		}
+		if (select == "/End") {
+			break;
+		}
+	}
 	return 0;
 }
 int ShapeProcessing(Circle* Shape, double val) {
+	string select;
+	double valToCommand;
+	cout << "\n\tYou created your shape! Now, you can apply a few modification. Your shape: \n\n";
 	cout << Shape->shapeToString();
+
+	cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+	cout << "Enter \"/SetPerimetr (value)\" to set perimetr for your shape\n\t";
+	cout << "Enter \"/SetRadius (value)\" to set radius for your shape\n\t";
+	cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+	cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+
+	while (true)
+	{
+		cout << "\n\tEnter command: ";
+		cin >> select >> valToCommand;
+
+		if (select == "/SetPerimetr") {
+			Shape->SetPerimetr(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetArea") {
+			Shape->SetSquare(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetRadius") {
+			Shape->SetRadius(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/End") {
+			break;
+		}
+		if (select == "/Info") {
+			cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+			cout << "Enter \"/SetPerimetr (value)\" to set perimetr for your shape\n\t";
+			cout << "Enter \"/SetRadius (value)\" to set radius for your shape\n\t";
+			cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+			cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+			continue;
+		}
+	}
 
 	return 0;
 }
 int ShapeProcessing(Sphere* Shape, double val) {
+	string select;
+	double valToCommand;
+	cout << "\n\tYou created your shape! Now, you can apply a few modification. Your shape: \n\n";
 	cout << Shape->shapeToString();
+
+	cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+	cout << "Enter \"/SetVolume (value)\" to set volume for your shape\n\t";
+	cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+	cout << "Enter \"/GetShapeOfSide (0)\" to setradius of inscribed circle for your shape\n\t";
+	cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+	cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+
+	while (true)
+	{
+		cout << "\n\tEnter command: ";
+		cin >> select >> valToCommand;
+
+		if (select == "/Info") {
+			cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
+			cout << "Enter \"/SetVolume (value)\" to set volume for your shape\n\t";
+			cout << "Enter \"/SetRadius (value)\" to set radius of side for your shape\n\t";
+			cout << "Enter \"/GetShapeOfSide (0)\" to setradius of inscribed circle for your shape\n\t";
+			cout << "Enter \"/Info (0) \" to get list of commands\n\t";
+			cout << "Enter \"/End (0)\" to set area for your shape\n\t";
+			continue;
+		}
+		if (select == "/SetArea") {
+			Shape->SetSquare(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetRadius") {
+			Shape->setSideLength(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/SetVolume") {
+			Shape->SetVolume(valToCommand);
+			cout << endl << endl << Shape->shapeToString() << endl << endl;
+			continue;
+		}
+		if (select == "/GetShapeOfSide") {
+			Circle* A = Shape->GetShapeOfSide();
+			cout << endl << A->shapeToString() << endl;
+			DeleteFlatSHapeObject(A);
+			continue;
+		}
+		if (select == "/End") {
+			return 0;
+		}
+	}
 
 	return 0;
 }
