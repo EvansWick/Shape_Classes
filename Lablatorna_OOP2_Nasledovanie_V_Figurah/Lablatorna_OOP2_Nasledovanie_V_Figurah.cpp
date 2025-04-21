@@ -1233,7 +1233,7 @@ int ShapeProcessing(Sphere* Shape, double val) {
 
 	cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
 	cout << "Enter \"/SetVolume (value)\" to set volume for your shape\n\t";
-	cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+	cout << "Enter \"/SetRadius (value)\" to set radius of side for your shape\n\t";
 	cout << "Enter \"/GetShapeOfSide (0)\" to setradius of inscribed circle for your shape\n\t";
 	cout << "Enter \"/Info (0) \" to get list of commands\n\t";
 	cout << "Enter \"/End (0)\" to set area for your shape\n\t";
