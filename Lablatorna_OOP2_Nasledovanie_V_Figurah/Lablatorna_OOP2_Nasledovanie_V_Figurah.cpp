@@ -4,13 +4,12 @@
 #include <cmath>
 #include <sstream>
 
-//#define WathcConstructorAndDestructorInformation 
+//#define WathcConstructorAndDestructorInformation
 
 using namespace std;
 void GlobalInterface();
 
-double P = 3.141592;
-
+double const P = 3.141592;
 class shape {
 
 	
@@ -155,8 +154,6 @@ public:
 	virtual void SetPerimetr(double val) {}
 	friend void DeleteFlatSHapeObject(FlatShape* obj);
 };
-
-
 class VolumeShape : public shape // Объемные фигуры
 {
 protected:
@@ -170,7 +167,6 @@ protected:
 		 cout << "\n\tVolumeShape Destroed!\n";
 #endif
 	}
-
 public:
 	VolumeShape(double LengthSide_arg) : shape(LengthSide_arg)
 	{
@@ -181,7 +177,6 @@ public:
 #ifdef WathcConstructorAndDestructorInformation
 			cout << "\n\tVolumeShape Created\n";
 #endif
-
 	}
 	string shapeToString() const override {
 		ostringstream ss;
@@ -190,7 +185,6 @@ public:
 		ss << "\n\tNumOfFasecThroughVertices: " << NumOfFacesThroughVertices << "\n\tnumOfSidesInFace: " << numOfSidesInFace;	
 		return ss.str();
 	}
-
 	double GetVolume() {
 		return volume;
 	}
@@ -203,12 +197,10 @@ public:
 	virtual FlatShape* GetShapeOfSide() = 0;
 	//setters
 	virtual void SetVolume(double val) = 0;
-
-	
 };
+
 class Rectangle : public FlatShape
 {
-
 public:
 	Rectangle(double LengthSide_arg) : FlatShape(LengthSide_arg)
 	{
@@ -287,9 +279,7 @@ public:
 			cout << "\n\tError, legth of side can't be < 0!";
 		}
 	}
-
-	
-}; // Сделать радиусы вписаных кругов
+}; 
 class Triangle : public FlatShape
 {
 
@@ -594,7 +584,6 @@ public:
 			SetRadius(val / (P)*2);
 		}
 	}
-
 		string shapeToString() const {
 		ostringstream ss;
 		ss << "\n\tName: " << name;
@@ -640,8 +629,6 @@ public:
 			cout << "\tVolumeSHape created";
 #endif
 		}
-
-		
 	}
 	// setters
 	void setSideLength(double val) override {
@@ -719,7 +706,6 @@ public:
 			this->RadiusOfDescribedCircle = 0;
 			cout << "\tVolumeSHape created";
 		}
-
 	}
 	// setters
 	void setSideLength(double val) override {
@@ -749,7 +735,6 @@ public:
 		Triangle* R = new Triangle(SideLength); // 
 		return R;
 	}
-	friend void DeleteFlatSHapeObject(FlatShape* obj);
 };
 class Oktaeder : public VolumeShape
 {
@@ -784,7 +769,6 @@ public:
 			this->RadiusOfDescribedCircle = 0;
 			cout << "\tVolumeSHape created";
 		}
-
 	}
 	// setters
 	void setSideLength(double val) override {
@@ -816,7 +800,6 @@ public:
 		Triangle* R = new Triangle(SideLength); // 
 		return R;
 	}
-	friend void DeleteFlatSHapeObject(FlatShape* obj);
 };
 class Dodekaeder : public VolumeShape
 {
@@ -851,7 +834,6 @@ public:
 			this->RadiusOfDescribedCircle = 0;
 			cout << "\tVolumeSHape created";
 		}
-
 	}
 	// setters
 	void setSideLength(double val) override {
@@ -883,7 +865,6 @@ public:
 		Pentagon* R = new Pentagon(SideLength); // 
 		return R;
 	}
-	friend void DeleteFlatSHapeObject(FlatShape* obj);
 };
 class Sphere : public shape
 {
@@ -913,7 +894,7 @@ public:
 			this->volume = 0;
 			cout << "Bed params!";
 		}
-		// методы вписаного круга........................................................
+		
 	}
 	Sphere() : shape(0) {
 		Radius = 0;
@@ -932,22 +913,15 @@ public:
 			cout << "\n\tError! Radius must be > 0!";
 		}
 	}
-
 	void SetSquare(double val) override
 	{
-		if (val >= 0) {
-			SetRadius(sqrt(val / (P*4)));
-		}
-		else {
-			cout << "\n\tError! Area must be > 0!";
-		}
+		SetRadius(sqrt(val / (P * 4)));
 	}
 	void SetVolume(double val) {
 		if (val >= 0) {
 			SetRadius(cbrt(3*val/(4*P)));
 		}
 	}
-
 	string shapeToString() const {
 		ostringstream ss;
 		ss << "\n\tName: " << name;
@@ -956,8 +930,6 @@ public:
 		ss << "\n\tVolumeOfSphere: " << volume;
 		return ss.str();
 	}
-
-
 	Circle* GetShapeOfSide() {
 		Circle* R = new Circle(Radius); // 
 		return R;
@@ -987,12 +959,17 @@ double LengthVal;
 for (int i = 0; i < 10; i++) {
 	cout << "\"" << Variables[i] << "\", ";
 }
-cout << endl << "\tEnter type: \"Shape (value)\"\n\t";
+cout << endl << "\tEnter type: \"Shape (value)\"\n\tTo stop creating shapes, press: \"/Out (0)\"\n";
 
 	while (true)
 	{
 		cout << "\n\tEnter shape you want explore and her side length: ";
 		cin >> ShapeName >> LengthVal;
+		
+		if (ShapeName == "/Out") {
+			return;
+		}
+
 		int id;
 		for (id = 0; id < 10; id++) {
 			if (ShapeName == Variables[id]) {
@@ -1048,10 +1025,6 @@ cout << endl << "\tEnter type: \"Shape (value)\"\n\t";
 			Sphere A(LengthVal);
 			ShapeProcessing(&A, LengthVal);
 		}
-		if (ShapeName == "/Out") {
-			return;
-		}
-
 	}
 
 }
@@ -1121,7 +1094,6 @@ int ShapeProcessing(FlatShape* Shape, double val) {
 			return 0;
 		}
 	}
-
 	return 0;
 }
 int ShapeProcessing(VolumeShape* Shape, double val) {
@@ -1233,7 +1205,7 @@ int ShapeProcessing(Sphere* Shape, double val) {
 
 	cout << endl << endl << "\tEnter \"/SetArea (value)\" to set area for your shape\n\t";
 	cout << "Enter \"/SetVolume (value)\" to set volume for your shape\n\t";
-	cout << "Enter \"/SetSideLength (value)\" to set length of side for your shape\n\t";
+	cout << "Enter \"/SetRadius (value)\" to set radius of side for your shape\n\t";
 	cout << "Enter \"/GetShapeOfSide (0)\" to setradius of inscribed circle for your shape\n\t";
 	cout << "Enter \"/Info (0) \" to get list of commands\n\t";
 	cout << "Enter \"/End (0)\" to set area for your shape\n\t";
@@ -1277,6 +1249,5 @@ int ShapeProcessing(Sphere* Shape, double val) {
 			return 0;
 		}
 	}
-
 	return 0;
 }
